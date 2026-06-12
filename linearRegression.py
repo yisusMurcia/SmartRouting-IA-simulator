@@ -25,6 +25,5 @@ def linearRegression(trainingData):
     vectorStructure = buildVectorStructure(xArr)
     for i in range(len(trainingData)):
         trainingData[i][0] = phi(vectorStructure, trainingData[i][0])
-    w = np.zeros(len(vectorStructure) + 1)
-
+    w = initializeWeights(trainingData[0][0])
     return stochasticGradientDescent(lossFunction, gradientLossFunction, trainingData, w)

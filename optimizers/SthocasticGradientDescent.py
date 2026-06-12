@@ -5,7 +5,7 @@ def stochasticGradientDescent(functionLoss, gradientFunctionLoss, trainExamples,
     for i in range(epochs):
         for x, y in trainExamples:
             gradient = gradientFunctionLoss(x, y, w)
-            eta = 1 / (iterations**2)
+            eta = 0.0001 / (1 + 0.01 * iterations)
             if eta < 1e-10:
                 break
             w = w - gradient * eta
