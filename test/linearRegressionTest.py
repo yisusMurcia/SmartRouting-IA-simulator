@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from linearRegression import linearRegression
+from feature_vector import buildVectorStructure, phi
 
 # Datos sintéticos para entrenar y probar el modelo de predicción de tráfico (Fase 1)
 traffic_data = [
@@ -29,4 +30,10 @@ traffic_data = [
 
 training_data = [[dict, dict["travel_time"]] for dict in traffic_data]
 
-linearRegression(training_data)
+w = linearRegression(training_data)
+
+vectorStructure = buildVectorStructure(traffic_data)
+reg = 0
+for x, y in training_data:
+    print(f"{reg} Predicted: {w.dot(x)}, Actual: {y}")
+    reg+=1
