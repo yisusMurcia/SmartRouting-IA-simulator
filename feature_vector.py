@@ -25,5 +25,5 @@ def phi(vectorStructure, x):
         elif key == "street_length":
             phi[vectorStructure[key]] = x[key]/1000  # Normalización
         else:
-            phi[vectorStructure[key]] = x["hora"] if x["weather"] == key else 0
+            phi[vectorStructure[key]] = (x["hora"] + x["street_length"]/1000) if x["weather"] == key else 0
     return phi

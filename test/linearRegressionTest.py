@@ -32,8 +32,8 @@ training_data = [[dict, dict["travel_time"]] for dict in traffic_data]
 
 w = linearRegression(training_data)
 
-vectorStructure = buildVectorStructure(traffic_data)
+vectorStructure = buildVectorStructure(traffic_data[0:15])
 reg = 0
-for x, y in training_data:
+for x, y in training_data[9:]:
     print(f"{reg} Predicted: {w.dot(x)}, Actual: {y}")
     reg+=1
