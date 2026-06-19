@@ -28,12 +28,20 @@ traffic_data = [
     {"hora": 12, "weather": "rainy", "street_length": 500.0, "travel_time": 15.6}
 ]
 
-training_data = [[dict, dict["travel_time"]] for dict in traffic_data]
+training_data = [[dict, dict["travel_time"]] for dict in traffic_data[0:15]]
+test_data = [[dict, dict["travel_time"]] for dict in traffic_data[15:]]
+vector = buildVectorStructure(traffic_data)
 
 w = linearRegression(training_data)
 
-vectorStructure = buildVectorStructure(traffic_data[0:15])
-reg = 0
+print("Validation:")
 for x, y in training_data[9:]:
-    print(f"{reg} Predicted: {w.dot(x)}, Actual: {y}")
-    reg+=1
+    print(f"Predicted: {w.dot(x)}, Actual: {y}")
+
+
+print("Test")
+sumValues = 0
+for x, y in test_data:
+    print(f"Predicted: {w.dot(phi(vector, x))}, Actual: {y}")
+    sumValues += (w.dot(phi(vector, x)) - y) ** 2
+print(f"Squared error: {sumValues/len(test_data)}")

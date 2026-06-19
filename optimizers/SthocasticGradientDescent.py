@@ -2,6 +2,7 @@ import math
 
 
 epochs = 500
+penalization = 0.9
 
 def stochasticGradientDescent(functionLoss, gradientFunctionLoss, trainExamples, w):
     iterations = 1
@@ -11,8 +12,7 @@ def stochasticGradientDescent(functionLoss, gradientFunctionLoss, trainExamples,
             eta = 0.01 / math.sqrt(iterations)  # Learning rate decay
             if eta < 1e-10:
                 break
-            w = w - gradient * eta
+            w = w - eta* (gradient + penalization * w)  # L2 regularization
             iterations += 1
-        print(f"Epoch: {i}, Weights: {w}")
     print(f"Final Weights: {w}, Loss: {functionLoss(trainExamples, w)}")
     return w
