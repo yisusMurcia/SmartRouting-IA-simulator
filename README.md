@@ -5,7 +5,7 @@ A dispatch and route simulation that solves congestion prediction, route plannin
 ## Requirements:
 
 ### Functional requirements:
-- [ ] Traffic prediction: Predict travel time between two points taking in count the time day, weather and historical congestion.
+- [-] Traffic prediction: Predict travel time between two points taking in count the time day, weather and historical congestion.
 - [ ] Optimal routing: Calculate and display the lowest-cost time path between an origin and destination over a graph.
 - [ ] Dr9ver scheduling: generate a weekly work schedule for N drivers with limited vehicles ensuring all buisness constraints are met without conflicts.
 - [ ] Incident simulation: The simulation must suport random traffic incidents and recalculate.

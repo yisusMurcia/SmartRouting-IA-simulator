@@ -1,4 +1,4 @@
-# dict structure {hora: int, weather: string, street_length: float}
+# dict structure {hour: int, weather: string, street_length: float}
 import numpy as np
 
 def buildVectorStructure(trainingData: list[dict])-> dict:
@@ -6,7 +6,7 @@ def buildVectorStructure(trainingData: list[dict])-> dict:
     for dict in trainingData:
         weather.add(dict["weather"])
 
-    vectorStructure = {"hora": 1, "street_length": 5}
+    vectorStructure = {"hour": 1, "street_length": 5}
     index = 6
     for val in weather:
         vectorStructure[val] = index
@@ -17,7 +17,7 @@ def phi(vectorStructure, x):
     phi = np.zeros(len(vectorStructure) + 4)
     phi[0] = 1  # Bias term
     for key in vectorStructure:
-        if key == "hora":
+        if key == "hour":
             phi[vectorStructure[key]] = x[key]
             phi[2] = (x[key]/24)**2
             phi[3] = (x[key]/24)**3
