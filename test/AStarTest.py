@@ -2,11 +2,38 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-import UCS
+from AStar import search
 from feature_vector import buildVectorStructure
 from linearRegression import linearRegression
 
-# Estructura de Grafo para UCS (Hora Dinámica)
+# Coordenadas geográficas (Latitud y Longitud)
+city_coordinates = {
+    # Eje Central e Inicio
+    "Bogota": {"lat": 4.6097, "lon": -74.0817},
+    "Chiapinero": {"lat": 4.6486, "lon": -74.0614},
+    "Usaquen": {"lat": 4.7014, "lon": -74.0298},
+    
+    # La Gran Trampa: Red densa hacia el Norte (Boyacá y Santander)
+    "Zipaquira": {"lat": 5.0256, "lon": -74.0044},
+    "Nemocon": {"lat": 5.0669, "lon": -73.8781},
+    "Ubate": {"lat": 5.3114, "lon": -73.8153},
+    "Chiquinquira": {"lat": 5.6171, "lon": -73.8166},
+    "Raquira": {"lat": 5.5394, "lon": -73.6339},
+    "Villa_de_Leyva": {"lat": 5.6373, "lon": -73.5244},
+    "Tunja": {"lat": 5.5353, "lon": -73.3678},
+    "Duitama": {"lat": 5.8271, "lon": -73.0336},
+    "Sogamoso": {"lat": 5.7142, "lon": -72.9338},
+    "Barbosa": {"lat": 5.9317, "lon": -73.6156},
+    "San_Gil": {"lat": 6.5556, "lon": -73.1331},
+    "Bucaramanga": {"lat": 7.1193, "lon": -73.1227},
+    
+    # El Camino Real hacia el Objetivo: Sur/Oriente (Meta)
+    "Chipaque": {"lat": 4.4372, "lon": -74.0453},
+    "Caqueza": {"lat": 4.3853, "lon": -73.9456},
+    "Guayabetal": {"lat": 4.2181, "lon": -73.8161},
+    "Villavicencio": {"lat": 4.1420, "lon": -73.6266}
+}
+
 # Grafo de carreteras colombianas
 graph_structure = {
     # Salidas desde Bogotá
@@ -75,8 +102,8 @@ graph_structure = {
     },
     "Villavicencio": {} # ¡DESTINO FINAL!
 }
+
 #train examples for linear regression, using the same data as in linearRegressionTest.py
-# Datos sintéticos para entrenar y probar el modelo de predicción de tráfico (Fase 1)
 traffic_data = [
     {"hour": 8, "weather": "sunny", "street_length": 450.5, "travel_time": 12.3},
     {"hour": 18, "weather": "rainy", "street_length": 800.0, "travel_time": 28.5},
@@ -107,5 +134,5 @@ vector = buildVectorStructure(traffic_data)
 w = linearRegression(training_data)
 
 for i in range(25):
-    path, cost = UCS.UCS("Bogota", "Barbosa", graph_structure, w, vector, i)
+    path, cost = search("Bogota", "Barbosa", graph_structure, w, vector, city_coordinates, i)
     print(f"Hour {i}:\n\t Optimal Path: {path}, Total Cost: {cost} minutes")
