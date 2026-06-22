@@ -2,10 +2,11 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from AStar import search
-from feature_vector import buildVectorStructure
-from linearRegression import linearRegression
+from routing.AStar import search
+from models.feature_vector import buildVectorStructure
+from models.linearRegression import linearRegression
 
+# Coordenadas geográficas (Latitud y Longitud)
 # Coordenadas geográficas (Latitud y Longitud)
 city_coordinates = {
     # Eje Central e Inicio
@@ -33,8 +34,6 @@ city_coordinates = {
     "Guayabetal": {"lat": 4.2181, "lon": -73.8161},
     "Villavicencio": {"lat": 4.1420, "lon": -73.6266}
 }
-
-# Grafo de carreteras colombianas
 graph_structure = {
     # Salidas desde Bogotá
     "Bogota": {
@@ -134,5 +133,5 @@ vector = buildVectorStructure(traffic_data)
 w = linearRegression(training_data)
 
 for i in range(25):
-    path, cost = search("Bogota", "Barbosa", graph_structure, w, vector, city_coordinates, i)
+    path, cost = search("Bogota", "Villavicencio", graph_structure, w, vector, city_coordinates, i)
     print(f"Hour {i}:\n\t Optimal Path: {path}, Total Cost: {cost} minutes")

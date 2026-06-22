@@ -3,7 +3,7 @@ import sys
 import os
 import math
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from feature_vector import phi
+from models.feature_vector import phi
 
 MAX_SPEED = 120  # km/h, for heuristic estimation
 

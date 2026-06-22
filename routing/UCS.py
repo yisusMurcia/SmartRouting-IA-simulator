@@ -2,7 +2,7 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from feature_vector import phi
+from models.feature_vector import phi
 
 #graph Structure {city{nearCity1: pathData(wather, street:length)}}
 def UCS(startCity: str, end: str, graph: dict, w, vectorStructure, startingHour=0):

@@ -2,9 +2,9 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from feature_vector import buildVectorStructure, phi
+from models.feature_vector import buildVectorStructure, phi
 import numpy as np
-from optimizers.SthocasticGradientDescent import stochasticGradientDescent
+from optimizers.StochasticGradientDescent import stochasticGradientDescent
 
 
 def lossFunction(trainingData, w):

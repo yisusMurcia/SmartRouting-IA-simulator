@@ -2,9 +2,9 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-import UCS
-from feature_vector import buildVectorStructure
-from linearRegression import linearRegression
+import routing.UCS as UCS
+from models.feature_vector import buildVectorStructure
+from models.linearRegression import linearRegression
 
 # Estructura de Grafo para UCS (Hora Dinámica)
 # Grafo de carreteras colombianas

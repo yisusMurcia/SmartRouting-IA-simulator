@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from feature_vector import buildVectorStructure, phi
+from models.feature_vector import buildVectorStructure, phi
 
 test_traffic_data = [
     {"hour": 9, "weather": "sunny", "street_length": 520.0},

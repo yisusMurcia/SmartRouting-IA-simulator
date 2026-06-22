@@ -1,8 +1,8 @@
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from linearRegression import linearRegression
-from feature_vector import buildVectorStructure, phi
+from models.linearRegression import linearRegression
+from models.feature_vector import buildVectorStructure, phi
 
 # Datos sintéticos para entrenar y probar el modelo de predicción de tráfico (Fase 1)
 traffic_data = [
