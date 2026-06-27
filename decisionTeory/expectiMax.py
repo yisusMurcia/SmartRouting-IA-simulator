@@ -1,8 +1,8 @@
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from models.feature_vector import phi
 from routing.HaversineFormula import getExpectedTime
+from models.feature_vector import FeatureVector
 
 def weatherProbChanges(weather: str, accident: float, block: float):
     if weather == "rainy":
@@ -23,7 +23,7 @@ def modifyTimeCost(time: float, roadStatus):
         time *= 3.0  # Incremento por bloqueo
     return time
 
-def expectimax(node: str, endCity: str, graph: dict, w, vectorStructure, locationDict, hour: float, depth: int = 5, time: float = 0) -> tuple[float, list]:
+def expectimax(node: str, endCity: str, graph: dict, w, featureVector, locationDict, hour: float, depth: int = 5, time: float = 0) -> tuple[float, list]:
     # CASO BASE 1: Llegamos al destino con éxito
     if node == endCity:
         return 0.0, [node]
@@ -39,7 +39,7 @@ def expectimax(node: str, endCity: str, graph: dict, w, vectorStructure, locatio
     for neighbor, data in graph[node].items():
         x = data.copy()
         x["hour"] = (hour + time/60) % 24  
-        edge_cost = w.dot(phi(vectorStructure, x))
+        edge_cost = w.dot(featureVector.phi(x))
 
         accident_prob, block_prob = weatherProbChanges(data["weather"], data.get("accident", 0.1), data.get("block", 0.05))
         normal_prob = 1 - accident_prob - block_prob
@@ -57,7 +57,7 @@ def expectimax(node: str, endCity: str, graph: dict, w, vectorStructure, locatio
             modified_cost = modifyTimeCost(edge_cost, status)
             
             cost_from_neighbor, execution_path = expectimax(
-                neighbor, endCity, graph, w, vectorStructure, locationDict, 
+                neighbor, endCity, graph, w, featureVector, locationDict, 
                 x["hour"], depth - 1, time + modified_cost
             )
             

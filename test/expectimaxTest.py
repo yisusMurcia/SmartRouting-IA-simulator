@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from decisionTeory.expectiMax import expectimax
-from models.feature_vector import buildVectorStructure
+from models.feature_vector import FeatureVector
 from models.linearRegression import linearRegression
 
 city_coordinates = {
@@ -237,12 +237,10 @@ traffic_data = [
     {"hour": 12, "weather": "rainy", "street_length": 500.0, "travel_time": 15.6}
 ]
 
-training_data = [[dict, dict["travel_time"]] for dict in traffic_data[0:15]]
-test_data = [[dict, dict["travel_time"]] for dict in traffic_data[15:]]
-vector = buildVectorStructure(traffic_data)
+featureVector = FeatureVector(traffic_data)
 
-w = linearRegression(training_data)
+w = linearRegression(featureVector.initializeW(), [featureVector.phi(x) for x in traffic_data], [y["travel_time"] for y in traffic_data])
 
 for i in range(25):
-    cost, path = expectimax("Bogota", "Villavicencio", graph_structure, w, vector, city_coordinates, i)
+    cost, path = expectimax("Bogota", "Villavicencio", graph_structure, w, featureVector, city_coordinates, i)
     print(f"{path}\n\t expected cost: {cost}")

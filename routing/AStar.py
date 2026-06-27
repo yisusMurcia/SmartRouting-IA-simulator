@@ -2,10 +2,10 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from models.feature_vector import phi
+from models.feature_vector import FeatureVector
 from routing.HaversineFormula import getExpectedTime
 
-def search(startCity: str, end: str, graph: dict, w, vectorStructure, locationDict, startingHour = 0):
+def search(startCity: str, end: str, graph: dict, w, featureVector: FeatureVector, locationDict, startingHour = 0):
     visited = set()
 
     queue = [(getExpectedTime(startCity, end, locationDict),0, startCity, [])]  # (cost, estimation, city, path)
@@ -24,7 +24,7 @@ def search(startCity: str, end: str, graph: dict, w, vectorStructure, locationDi
             if neighbor not in visited:
                 x = data.copy()
                 x["hour"] = (startingHour + cost/60) % 24  # Update hour
-                edge_cost = w.dot(phi(vectorStructure, x))
+                edge_cost = w.dot(featureVector.phi(x))
                 estimation = cost + edge_cost + getExpectedTime(neighbor, end, locationDict)
                 queue.append((estimation, cost + edge_cost, neighbor, path))
 

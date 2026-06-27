@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from models.linearRegression import linearRegression
-from models.feature_vector import buildVectorStructure, phi
+from models.feature_vector import FeatureVector
 
 # Datos sintéticos para entrenar y probar el modelo de predicción de tráfico (Fase 1)
 traffic_data = [
@@ -28,20 +28,22 @@ traffic_data = [
     {"hour": 12, "weather": "rainy", "street_length": 500.0, "travel_time": 15.6}
 ]
 
-training_data = [[dict, dict["travel_time"]] for dict in traffic_data[0:15]]
-test_data = [[dict, dict["travel_time"]] for dict in traffic_data[15:]]
-vector = buildVectorStructure(traffic_data)
+training_data = [[dict, dict["travel_time"]] for dict in traffic_data]
+featureVector = FeatureVector(traffic_data)
 
-w = linearRegression(training_data)
+xArr = [featureVector.phi(x) for x, y in training_data]
+yArr = [y for x, y in training_data]
+
+w = linearRegression(featureVector.initializeW(), xArr[0:15], yArr[0: 15])
 
 print("Validation:")
-for x, y in training_data[9:]:
-    print(f"Predicted: {w.dot(x)}, Actual: {y}")
-
+for i in range(9, 15):
+    print(f"Predicted: {w.dot(xArr[i])}, Actual: {yArr[i]}")
 
 print("Test")
 sumValues = 0
-for x, y in test_data:
-    print(f"Predicted: {w.dot(phi(vector, x))}, Actual: {y}")
-    sumValues += (w.dot(phi(vector, x)) - y) ** 2
-print(f"Squared error: {sumValues/len(test_data)}")
+for i in range(15, len(training_data)):
+    prediction = w.dot(xArr[i])
+    print(f"Predicted: {prediction}, Actual: {yArr[i]}")
+    sumValues += (prediction - yArr[i]) ** 2
+print(f"Squared error: {sumValues/5}")

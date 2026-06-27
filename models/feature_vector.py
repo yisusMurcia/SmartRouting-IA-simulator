@@ -1,29 +1,36 @@
 # dict structure {hour: int, weather: string, street_length: float}
 import numpy as np
 
-def buildVectorStructure(trainingData: list[dict])-> dict:
-    weather = set()
-    for dict in trainingData:
-        weather.add(dict["weather"])
+class FeatureVector:
 
-    vectorStructure = {"hour": 1, "street_length": 5}
-    index = 6
-    for val in weather:
-        vectorStructure[val] = index
-        index+= 1
-    return vectorStructure
+    def __init__(self, trainingData: list[dict]):
+        self.featureVector = {}
+        self.buildFeatureVector(trainingData)
 
-def phi(vectorStructure, x):
-    phi = np.zeros(len(vectorStructure) + 4)
-    phi[0] = 1  # Bias term
-    for key in vectorStructure:
-        if key == "hour":
-            phi[vectorStructure[key]] = x[key]
-            phi[2] = (x[key]/24)**2
-            phi[3] = (x[key]/24)**3
-            phi[4] = (x[key]/24)**4
-        elif key == "street_length":
-            phi[vectorStructure[key]] = x[key]/1000  # Normalización
-        else:
-            phi[vectorStructure[key]] = (1) if x["weather"] == key else 0
-    return phi
+    def buildFeatureVector(self, data: list[dict]):
+        for reg in data:
+             for key in self.__buildDict(reg):
+                 self.featureVector[key] = 0
+
+
+    def __buildDict(self, x):
+        phi = {}
+        for i in range(5):
+            phi[f"hour_grade_{i}"] = (x["hour"]/24)**i
+        phi["street_length"] = x["street_length"]/1000
+        phi[x["weather"]] = x["hour"]
+
+        return phi
+    
+    def phi(self, x):
+        phiDict = self.__buildDict(x);
+        phiVector = np.zeros(len(self.featureVector))
+        i = 0
+        for key in self.featureVector:
+            if key in phiDict:
+                phiVector[i] = phiDict[key]
+            i+= 1
+        return phiVector
+    
+    def initializeW(self):
+        return np.zeros(len(self.featureVector))

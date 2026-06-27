@@ -1,8 +1,6 @@
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from models.feature_vector import buildVectorStructure, phi
 import numpy as np
 from optimizers.StochasticGradientDescent import stochasticGradientDescent
 
@@ -13,17 +11,8 @@ def lossFunction(trainingData, w):
 def gradientLossFunction(x, y, w):
     return (2 * (w.dot(x) - y) * x)
 
-def initializeWeights(x):
-    w = np.zeros(len(x))
-    return w
-
-def linearRegression(trainingData):
-    xArr = []
-    for x, y in trainingData:
-        xArr.append(x)
-
-    vectorStructure = buildVectorStructure(xArr)
-    for i in range(len(trainingData)):
-        trainingData[i][0] = phi(vectorStructure, trainingData[i][0])
-    w = initializeWeights(trainingData[0][0])
-    return stochasticGradientDescent(lossFunction, gradientLossFunction, trainingData, w)
+def linearRegression(w, x, y):
+    trainData = []
+    for i in range(len(x)):
+        trainData.append([x[i], y[i]])
+    return stochasticGradientDescent(lossFunction, gradientLossFunction, trainData, w)

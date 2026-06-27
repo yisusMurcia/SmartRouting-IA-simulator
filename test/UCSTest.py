@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import routing.UCS as UCS
-from models.feature_vector import buildVectorStructure
+from models.feature_vector import FeatureVector
 from models.linearRegression import linearRegression
 
 # Estructura de Grafo para UCS (Hora Dinámica)
@@ -100,12 +100,10 @@ traffic_data = [
     {"hour": 12, "weather": "rainy", "street_length": 500.0, "travel_time": 15.6}
 ]
 
-training_data = [[dict, dict["travel_time"]] for dict in traffic_data[0:15]]
-test_data = [[dict, dict["travel_time"]] for dict in traffic_data[15:]]
-vector = buildVectorStructure(traffic_data)
+featureVector = FeatureVector(traffic_data)
 
-w = linearRegression(training_data)
+w = linearRegression(featureVector.initializeW(), [featureVector.phi(x) for x in traffic_data], [y["travel_time"] for y in traffic_data])
 
 for i in range(25):
-    path, cost = UCS.UCS("Bogota", "Barbosa", graph_structure, w, vector, i)
+    path, cost = UCS.UCS("Bogota", "Barbosa", graph_structure, w, featureVector, i)
     print(f"Hour {i}:\n\t Optimal Path: {path}, Total Cost: {cost} minutes")
