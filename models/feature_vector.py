@@ -32,5 +32,22 @@ class FeatureVector:
             i+= 1
         return phiVector
     
-    def initializeW(self):
-        return np.zeros(len(self.featureVector))
+    def initializeW(self)->np.ndarray:
+        return np.zeros(len(self.featureVector), dtype=float)
+
+    def assignW(self, w:np.ndarray)->bool:
+        if len(w) == len(self.featureVector):
+            i = 0
+            for key in self.featureVector:
+                self.featureVector[key] = float(w[i])
+                i+=1
+            self.__w = w
+            return True
+        return False
+    
+    def wDotPhi(self, x):
+        if isinstance(x, np.ndarray):
+            phiX = x
+        else:
+            phiX = self.phi(x)
+        return self.__w.dot(phiX)

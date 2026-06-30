@@ -35,15 +35,16 @@ xArr = [featureVector.phi(x) for x, y in training_data]
 yArr = [y for x, y in training_data]
 
 w = linearRegression(featureVector.initializeW(), xArr[0:15], yArr[0: 15])
+featureVector.assignW(w)
 
 print("Validation:")
 for i in range(9, 15):
-    print(f"Predicted: {w.dot(xArr[i])}, Actual: {yArr[i]}")
+    print(f"Predicted: {featureVector.wDotPhi(xArr[i])}, Actual: {yArr[i]}")
 
 print("Test")
 sumValues = 0
 for i in range(15, len(training_data)):
-    prediction = w.dot(xArr[i])
+    prediction = featureVector.wDotPhi(xArr[i])
     print(f"Predicted: {prediction}, Actual: {yArr[i]}")
     sumValues += (prediction - yArr[i]) ** 2
 print(f"Squared error: {sumValues/5}")
