@@ -2,10 +2,10 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from models.feature_vector import FeatureVector
+from models.model import Model
 
 #graph Structure {city{nearCity1: pathData(wather, street:length)}}
-def UCS(startCity: str, end: str, graph: dict, w, featureVector: FeatureVector, startingHour=0):
+def UCS(startCity: str, end: str, graph: dict, w, featureVector: Model, startingHour=0):
     visited = set()
     queue = [(0, startCity, [])]  # (cost, city, path)
 

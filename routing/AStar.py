@@ -2,10 +2,10 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from models.feature_vector import FeatureVector
+from models.model import Model
 from routing.HaversineFormula import getExpectedTime
 
-def search(startCity: str, end: str, graph: dict, w, featureVector: FeatureVector, locationDict, startingHour = 0):
+def search(startCity: str, end: str, graph: dict, w, featureVector: Model, locationDict, startingHour = 0):
     visited = set()
 
     queue = [(getExpectedTime(startCity, end, locationDict),0, startCity, [])]  # (cost, estimation, city, path)

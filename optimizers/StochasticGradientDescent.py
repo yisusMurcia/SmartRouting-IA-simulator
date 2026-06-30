@@ -14,5 +14,6 @@ def stochasticGradientDescent(functionLoss, gradientFunctionLoss, trainExamples,
                 break
             w = w - eta* (gradient + penalization * w)  # L2 regularization
             iterations += 1
-    print(f"Final Weights: {w}, Loss: {functionLoss(trainExamples, w)}")
-    return w
+    loss = functionLoss(trainExamples, w)
+    print(f"Final Weights: {w}, Loss: {loss}")
+    return w, loss

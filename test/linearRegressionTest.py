@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from models.linearRegression import linearRegression
-from models.feature_vector import FeatureVector
+from models.model import Model
 
 # Datos sintéticos para entrenar y probar el modelo de predicción de tráfico (Fase 1)
 traffic_data = [
@@ -29,12 +29,12 @@ traffic_data = [
 ]
 
 training_data = [[dict, dict["travel_time"]] for dict in traffic_data]
-featureVector = FeatureVector(traffic_data)
+featureVector = Model(traffic_data)
 
 xArr = [featureVector.phi(x) for x, y in training_data]
 yArr = [y for x, y in training_data]
 
-w = linearRegression(featureVector.initializeW(), xArr[0:15], yArr[0: 15])
+w, loss = linearRegression(featureVector.initializeW(), xArr[0:15], yArr[0: 15])
 featureVector.assignW(w)
 
 print("Validation:")
@@ -48,3 +48,4 @@ for i in range(15, len(training_data)):
     print(f"Predicted: {prediction}, Actual: {yArr[i]}")
     sumValues += (prediction - yArr[i]) ** 2
 print(f"Squared error: {sumValues/5}")
+print(featureVector.featureVector)

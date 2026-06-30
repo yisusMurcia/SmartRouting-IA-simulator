@@ -1,11 +1,20 @@
 # dict structure {hour: int, weather: string, street_length: float}
 import numpy as np
 
-class FeatureVector:
+class Model:
 
-    def __init__(self, trainingData: list[dict]):
-        self.featureVector = {}
-        self.buildFeatureVector(trainingData)
+    def __init__(self, trainingData: list[dict], w:dict = {}):
+        if w:
+            self.featureVector = w
+            arr = np.zeros(len(w), dtype=float)
+            for key in w:
+                arr = w[key]
+            self.__w = arr
+            
+        else:
+            self.featureVector = {}
+            self.buildFeatureVector(trainingData)
+            arr = np.zeros(len(self.featureVector), dtype=float)
 
     def buildFeatureVector(self, data: list[dict]):
         for reg in data:

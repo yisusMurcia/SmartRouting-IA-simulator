@@ -14,6 +14,7 @@ This project implements a modular structure fir scalability and maintenance.
 - [Optimizers](../optimizers/) it´s the module with the mathematical optimization algorithms.
 - [Routing](../routing/) implement graph search algorithms
 - [Docs](../Docs/) Techincal documentation.
+- [Data](../data/) Contain data necesary about the program
 
 ## Data flow and components
 1. The time prediction model is trained.
@@ -38,3 +39,24 @@ The liniear regression uses a stochastic gradient descned as an optimizer.
 It´s represented as a dictionary of dictionaries, the key of the graph is the city name, this inner dict has a a value of other city (keys) that are included in the city graph, as values it coontains data about the weather and the street lenght of the road whose connect these cities.
 
 ⚠️ In development
+
+## Data consistency and persistence
+
+The system interacts with the [Data](../data/) directory, here you find:
+- ### [Model](../data/model.txt)
+
+Contains the feature vector and its weight, each line is estrucured like this: 
+
+| key | value |
+| --- | ---|
+| street | 1000 |
+| weather | sunny |
+
+- ### [road-time](../data/road-time.txt)
+
+Contains a list of data about the roads and the time, each line correspond to a road and it has this structure:
+> hour: 18, weather: foggy, street_length: 700.4, time: 25.1
+
+- ### [Train log](../data/train_log.txt)
+
+Contains data about the training process, include the error in the trainig, validaton data and some test data.

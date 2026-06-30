@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from models.feature_vector import FeatureVector
+from models.model import Model
 
 test_traffic_data = [
     {"hour": 9, "weather": "sunny", "street_length": 520.0},
@@ -27,7 +27,7 @@ test_traffic_data = [
     {"hour": 11, "weather": "rainy", "street_length": 490.0}
 ]
 
-featureVector = FeatureVector(test_traffic_data)
+featureVector = Model(test_traffic_data)
 
 for regist in test_traffic_data:
     print(featureVector.phi(regist))
