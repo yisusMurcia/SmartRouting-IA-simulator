@@ -43,19 +43,13 @@ It´s represented as a dictionary of dictionaries, the key of the graph is the c
 ## Data consistency and persistence
 
 The system interacts with the [Data](../data/) directory, here you find:
-- ### [Model](../data/model.txt)
+- ### [Model](../data/model.json)
 
-Contains the feature vector and its weight, each line is estrucured like this: 
+Contains the feature vector and its weight, each line is estrucured like this:
 
-| key | value |
-| --- | ---|
-| street | 1000 |
-| weather | sunny |
+- ### [road-time](../data/roadTime.json)
 
-- ### [road-time](../data/road-time.txt)
-
-Contains a list of data about the roads and the time, each line correspond to a road and it has this structure:
-> hour: 18, weather: foggy, street_length: 700.4, time: 25.1
+Contains a list of data about the roads and the time
 
 - ### [Train log](../data/train_log.txt)
 

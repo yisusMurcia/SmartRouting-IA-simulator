@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from routing.AStar import search
 from models.model import Model
 from models.linearRegression import linearRegression
+from routing.routeImportation import getRoutes
 
 # Coordenadas geográficas (Latitud y Longitud)
 # Coordenadas geográficas (Latitud y Longitud)
@@ -131,5 +132,5 @@ featureVector = Model(traffic_data)
 w, loss = linearRegression(featureVector.initializeW(), [featureVector.phi(x) for x in traffic_data], [y["travel_time"] for y in traffic_data])
 
 for i in range(25):
-    path, cost = search("Bogota", "Villavicencio", graph_structure, w, featureVector, city_coordinates, i)
+    path, cost = search("Bogota", "Villavicencio", getRoutes(), w, featureVector, city_coordinates, i)
     print(f"Hour {i}:\n\t Optimal Path: {path}, Total Cost: {cost} minutes")

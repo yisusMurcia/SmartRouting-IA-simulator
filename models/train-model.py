@@ -2,82 +2,51 @@ import sys
 import os
 import math
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+import json
 from models.model import Model
 from linearRegression import linearRegression
 
-DATA_FILE_NAME = "data/road-time.txt"
-W_FILE_NAME = "data/model.txt"
+DATA_FILE_NAME = "data/roadTime.json"
+W_FILE_NAME = "data/model.json"
 TRAIN_LOG_NAME = "data/train_log.txt"
 
 TRAIN_PORCENTAGE = 0.8
-VALIDATON_PORCENTAGE = 0.1
-
+VALIDATION_PORCENTAGE = 0.1
 
 def loadData(): # Return pair of x and y
     data_x = []
     data_y = []
-    file = open(DATA_FILE_NAME, 'r')
-    lines = file.read().split("\n")
-    
-    for line in lines:
-        line = line.strip().rstrip(',')
-        if not line:
+
+    with open(DATA_FILE_NAME, "r", encoding="utf-8") as f:
+        trafficData = json.load(f)
+
+    records = trafficData.get("traffic_data", trafficData) if isinstance(trafficData, dict) else trafficData
+
+    for data in records:
+        if not isinstance(data, dict):
             continue
-        x = {}
-        y = 0
 
-        parts = line.split(", ")
-        for part in parts:
-            key, val = part.split(": ")
-            
-            # convert if possible
-            try:
-                if '.' in val:
-                    val = float(val)
-                else:
-                    val = int(val)
-            except ValueError:
-                pass
-            
-            if key == "time":
-                y = val
-            else:
-                x[key] = val
-                
+        x = {key: value for key, value in data.items() if key != "travel_time"}
         data_x.append(x)
-        data_y.append(y)
 
-    file.close()
+        if "travel_time" in data:
+            data_y.append(data["travel_time"])
+
     return data_x, data_y
 
-def saveW(w:dict)->bool: #Save the featureVector of the class, return if the operation succeded
-    file = None
-    try:
-        file = open(W_FILE_NAME, 'w')
-        for key, val in w.items():
-            file.write(f"{key} {val}\n")
-    except:
-        return False
-    finally:
-        if file:
-            file.close()
-    return True
+def saveW(w:dict): #Save the featureVector of the class, return if the operation succeded
+    with open(W_FILE_NAME, "w", encoding="utf-8") as f:
+        json.dump(w, f, ensure_ascii=False, indent=4)
 
 def readW()->dict:
     w = {}
     try:
-        file = open(W_FILE_NAME, 'r')
-        lines = file.readlines()
-        for line in lines:
-            key, val = line.split(" ")
-            w[key] = float(val)
-
-        file.close()
+        with open(W_FILE_NAME, "r", encoding="utf-8") as f:
+            w = json.load(f)
     except:
         w = {}
         
     return w
-
 
 def buildFeatureVector()->Model:
     #Compare dates from road-time and feature-vector, if road-time is more recent retrain the model
@@ -115,14 +84,13 @@ def trainModel()->Model:
     file.write(f"Square loss: {loss}, loss: {math.sqrt(loss)}\n")
     file.write("Validation:\n")
     square_sum = 0
-    size = int(len(x)* VALIDATON_PORCENTAGE)
+    size = int(len(x)* VALIDATION_PORCENTAGE)
     for i in range(0, size):
         predicted = fv.wDotPhi(x_train[i])
         file.write(f"Predicted: {predicted}, actual: {y[i]}\n")
-        square_sum+= (predicted - y[i])** i
+        square_sum+= (predicted - y[i])** 2
     loss = square_sum/ size
     file.write(f"Square loss: {loss}, loss: {math.sqrt(loss)}\n")
-
 
     file.write("Test:\n")
     square_sum = 0
@@ -138,5 +106,3 @@ def trainModel()->Model:
     file.close()
 
     return fv
-
-buildFeatureVector()
