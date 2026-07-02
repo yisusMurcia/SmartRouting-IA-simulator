@@ -45,12 +45,35 @@ It´s represented as a dictionary of dictionaries, the key of the graph is the c
 The system interacts with the [Data](../data/) directory, here you find:
 - ### [Model](../data/model.json)
 
-Contains the feature vector and its weight, each line is estrucured like this:
+    Contains the feature vector and its weight, each line is estrucured like this:
 
 - ### [road-time](../data/roadTime.json)
 
-Contains a list of data about the roads and the time
+    Contains a list of data about the roads and the time
 
 - ### [Train log](../data/train_log.txt)
 
-Contains data about the training process, include the error in the trainig, validaton data and some test data.
+    Contains data about the training process, include the error in the trainig, validaton data and some test data.
+
+- ### [City coordinates](../data/coordinates.json)
+    Contains each city location in lat and lon values, it´s used for the heuristic in the A* algorithm
+
+- ### [City grap](../data/cityGraph.json)
+    Contians the conections between cities and the probabilities of an accident or block in the road
+
+    ```JSON
+    "Zipaquira": {
+            "Nemocon": {
+                "weather": "sunny", 
+                "street_length": 12000.0, 
+                "accident": 0.04, 
+                "block": 0.01
+            },
+            "Ubate": {
+                "weather": "sunny", 
+                "street_length": 51000.0, 
+                "accident": 0.08, 
+                "block": 0.02
+            }
+        }
+    ```
