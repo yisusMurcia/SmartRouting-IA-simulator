@@ -4,7 +4,7 @@ import math
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import json
 from models.model import Model
-from linearRegression import linearRegression
+from models.linearRegression import linearRegression
 
 DATA_FILE_NAME = "data/roadTime.json"
 W_FILE_NAME = "data/model.json"
@@ -45,7 +45,6 @@ def readW()->dict:
             w = json.load(f)
     except:
         w = {}
-        
     return w
 
 def buildFeatureVector()->Model:

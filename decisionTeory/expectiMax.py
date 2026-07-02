@@ -1,8 +1,9 @@
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from routing.HaversineFormula import getExpectedTime
-from models.model import Model
+from routing.AStar import search
+from routing.routeImportation import getRoutes
+from models.trainModel import buildFeatureVector
 
 def weatherProbChanges(weather: str, accident: float, block: float):
     if weather == "rainy":
@@ -23,15 +24,15 @@ def modifyTimeCost(time: float, roadStatus):
         time *= 3.0  # Incremento por bloqueo
     return time
 
-def expectimax(node: str, endCity: str, graph: dict, w, Model, locationDict, hour: float, depth: int = 5, time: float = 0) -> tuple[float, list]:
+def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model = buildFeatureVector(), time: float = 0, depth: int = 5) -> tuple[float, list]:
     # CASO BASE 1: Llegamos al destino con éxito
     if node == endCity:
         return 0.0, [node]
     
     # CASO BASE 2: Límite de profundidad (usamos la heurística optimista)
     if depth == 0:
-        expected_time = getExpectedTime(node, endCity, locationDict)
-        return expected_time, [node]
+        path, cost = search(node, endCity, hour, graph, model)
+        return cost, [node] + path[1:]  # Excluimos el nodo actual del camino para evitar duplicados
 
     min_cost = float('inf')
     best_path = []
@@ -39,7 +40,7 @@ def expectimax(node: str, endCity: str, graph: dict, w, Model, locationDict, hou
     for neighbor, data in graph[node].items():
         x = data.copy()
         x["hour"] = (hour + time/60) % 24  
-        edge_cost = w.dot(Model.phi(x))
+        edge_cost = model.wDotPhi(x)
 
         accident_prob, block_prob = weatherProbChanges(data["weather"], data.get("accident", 0.1), data.get("block", 0.05))
         normal_prob = 1 - accident_prob - block_prob
@@ -57,8 +58,7 @@ def expectimax(node: str, endCity: str, graph: dict, w, Model, locationDict, hou
             modified_cost = modifyTimeCost(edge_cost, status)
             
             cost_from_neighbor, execution_path = expectimax(
-                neighbor, endCity, graph, w, Model, locationDict, 
-                x["hour"], depth - 1, time + modified_cost
+                neighbor, endCity, x["hour"], graph, model, time + modified_cost, depth - 1
             )
             
             neighbor_expected_cost += prob * (modified_cost + cost_from_neighbor)

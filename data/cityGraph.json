@@ -1,0 +1,163 @@
+{
+    "Bogota": {
+        "Chiapinero": {
+            "weather": "sunny", 
+            "street_length": 5000.0, 
+            "accident": 0.08, 
+            "block": 0.01
+        },
+        "Chipaque": {
+            "weather": "cloudy", 
+            "street_length": 31000.0, 
+            "accident": 0.12, 
+            "block": 0.03
+        }
+    },
+    "Chiapinero": {
+        "Usaquen": {
+            "weather": "sunny", 
+            "street_length": 7000.0, 
+            "accident": 0.05, 
+            "block": 0.01
+        }
+    },
+    "Usaquen": {
+        "Zipaquira": {
+            "weather": "cloudy", 
+            "street_length": 38000.0, 
+            "accident": 0.10, 
+            "block": 0.02
+        }
+    },
+    "Zipaquira": {
+        "Nemocon": {
+            "weather": "sunny", 
+            "street_length": 12000.0, 
+            "accident": 0.04, 
+            "block": 0.01
+        },
+        "Ubate": {
+            "weather": "sunny", 
+            "street_length": 51000.0, 
+            "accident": 0.08, 
+            "block": 0.02
+        }
+    },
+    "Nemocon": {
+        "Ubate": {
+            "weather": "sunny", 
+            "street_length": 40000.0, 
+            "accident": 0.05, 
+            "block": 0.01
+        }
+    },
+    "Ubate": {
+        "Chiquinquira": {
+            "weather": "sunny", 
+            "street_length": 34000.0, 
+            "accident": 0.07, 
+            "block": 0.02
+        },
+        "Raquira": {
+            "weather": "sunny", 
+            "street_length": 42000.0, 
+            "accident": 0.05, 
+            "block": 0.01
+        }
+    },
+    "Chiquinquira": {
+        "Barbosa": {
+            "weather": "sunny", 
+            "street_length": 52000.0, 
+            "accident": 0.09, 
+            "block": 0.03
+        },
+        "Villa_de_Leyva": {
+            "weather": "sunny", 
+            "street_length": 41000.0, 
+            "accident": 0.06, 
+            "block": 0.01
+        }
+    },
+    "Raquira": {
+        "Villa_de_Leyva": {
+            "weather": "sunny", 
+            "street_length": 15000.0, 
+            "accident": 0.03, 
+            "block": 0.01
+        }
+    },
+    "Villa_de_Leyva": {
+        "Tunja": {
+            "weather": "sunny", 
+            "street_length": 38000.0, 
+            "accident": 0.07, 
+            "block": 0.02
+        }
+    },
+    "Tunja": {
+        "Duitama": {
+            "weather": "sunny", 
+            "street_length": 54000.0, 
+            "accident": 0.08, 
+            "block": 0.02
+        },
+        "Barbosa": {
+            "weather": "sunny", 
+            "street_length": 68000.0, 
+            "accident": 0.09, 
+            "block": 0.03
+        }
+    },
+    "Duitama": {
+        "Sogamoso": {
+            "weather": "sunny", 
+            "street_length": 20000.0, 
+            "accident": 0.04, 
+            "block": 0.01
+        }
+    },
+    "Barbosa": {
+        "San_Gil": {
+            "weather": "sunny", 
+            "street_length": 72000.0, 
+            "accident": 0.10, 
+            "block": 0.04
+        }
+    },
+    "San_Gil": {
+        "Bucaramanga": {
+            "weather": "sunny", 
+            "street_length": 98000.0, 
+            "accident": 0.12, 
+            "block": 0.05
+        }
+    },
+    "Sogamoso": {},
+    "Bucaramanga": {},
+    "Chipaque": {
+        "Caqueza": {
+            "weather": "foggy", 
+            "street_length": 15000.0, 
+            "accident": 0.18, 
+            "block": 0.08
+        }
+    },
+    "Caqueza": {
+        "Guayabetal": {
+            "weather": "rainy", 
+            "street_length": 32000.0, 
+            "accident": 0.22, 
+            "block": 0.12
+        }
+    },
+    "Guayabetal": {
+        "Villavicencio": {
+            "weather": "rainy", 
+            "street_length": 26000.0, 
+            "accident": 0.20, 
+            "block": 0.15
+        }
+    },
+    "Villavicencio": {}
+}
