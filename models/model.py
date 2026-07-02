@@ -6,15 +6,15 @@ class Model:
     def __init__(self, trainingData: list[dict], w:dict = {}):
         if w:
             self.featureVector = w
-            arr = np.zeros(len(w), dtype=float)
+            self.__w = np.zeros(len(w), dtype=float)
+            i = 0
             for key in w:
-                arr = w[key]
-            self.__w = arr
-            
+                self.__w[i] = w[key]
+                i += 1
         else:
             self.featureVector = {}
             self.buildFeatureVector(trainingData)
-            arr = np.zeros(len(self.featureVector), dtype=float)
+            self.__w = np.zeros(len(self.featureVector), dtype=float)
 
     def buildFeatureVector(self, data: list[dict]):
         for reg in data:
