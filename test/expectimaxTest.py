@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from decisionTeory.expectiMax import expectimax
-from models.model import Model
 from routing.routeImportation import getRoutes
 from models.trainModel import buildFeatureVector
 

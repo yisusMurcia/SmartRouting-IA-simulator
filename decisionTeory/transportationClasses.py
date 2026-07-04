@@ -40,3 +40,10 @@ class Driver:
             self.shippings.append(shipping)
             return True
         return False
+    
+    def removeShipping(self, shipping: Shipping)->bool:
+        if shipping in self.shippings:
+            shipping.driver = None
+            self.shippings.remove(shipping)
+            return True
+        return False
