@@ -5,11 +5,11 @@ from decisionTeory.transportationClasses import Driver, Shipping
 from decisionTeory.driverAssigments import assignShippingsToDrivers
 
 envios_lista = [
-    Shipping(road=["Bogota", "Chiapinero"], leavingHour=7.0, weight=200.0, time=1.0),
-    Shipping(road=["Chiapinero", "Usaquen"], leavingHour=8.5, weight=400.0, time=1.0),
-    Shipping(road=["Usaquen", "Zipaquira"], leavingHour=11.5, weight=900.0, time=1.5),
-    Shipping(road=["Zipaquira", "Nemocon"], leavingHour=13.0, weight=300.0, time=1.0),
-    Shipping(road=["Bogota", "Chipaque"], leavingHour=15.0, weight=150.0, time=1.2)
+    Shipping(road=["Bogota", "Chiapinero"], leavingHour=12.0, weight=200.0, time=1.0),
+    Shipping(road=["Chiapinero", "Usaquen"], leavingHour=13.5, weight=400.0, time=1.0),
+    Shipping(road=["Usaquen", "Zipaquira"], leavingHour=15.0, weight=900.0, time=1.5),
+    Shipping(road=["Zipaquira", "Nemocon"], leavingHour=16.5, weight=300.0, time=1.0),
+    Shipping(road=["Bogota", "Chipaque"], leavingHour=17.5, weight=150.0, time=1.2)
 ]
 
 conductores_lista = [
@@ -19,7 +19,9 @@ conductores_lista = [
     Driver(name="Marta", maxWeight=600.0, ubication="Bogota", workdayStart=12.0, workdayEnd=20.0)
 ]
 
-print(assignShippingsToDrivers(envios_lista, conductores_lista))
+result = assignShippingsToDrivers(envios_lista, conductores_lista)
+print(result)
+assert result is True, "The solver should find a feasible assignment for this test instance."
 
 for driver in conductores_lista:
     print(f"Driver: {driver.name}, Assigned Shippings: {[shipping.id for shipping in driver.shippings]}")

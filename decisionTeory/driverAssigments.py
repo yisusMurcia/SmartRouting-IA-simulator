@@ -7,53 +7,42 @@ except ImportError:
     from transportationClasses import Driver, Shipping
 from routing.AStar import search
 
-def removeShippingToOtherDrivers(shipping: Shipping, drivers: list[Driver]) -> list[Driver]:
-    driversDomainAffected = []
-    for otherDriver in drivers:
-        if otherDriver.removeFromDomain(shipping):
-            driversDomainAffected.append(otherDriver)
-    return driversDomainAffected
+def updateDomains(shipStartTime: float, shipEndTime: float, driver: Driver, shippings: list[Shipping]):
+    affectedShippings = [shipping for shipping in shippings if driver in shipping.domain]
+    for shipping in affectedShippings:
+        shippingEndTime = shipping.leavingHour + shipping.time
+        if shipping.leavingHour < shipEndTime and shippingEndTime > shipStartTime:
+            shipping.removeDriverFromDomain(driver)
+    return affectedShippings
 
-def checkFeasibility(driver: Driver, shipping: Shipping) -> bool:
+def checkFeasibility(driver: Driver, shipping: Shipping) -> tuple[bool, float]:
     # Check workday constraints
     shippings = list(driver.shippings)
     shippings.append(shipping)
     shippings.sort(key=lambda x: x.leavingHour)
-    hour = 0
+    hour = driver.workdayStart
+    location = driver.ubication
     for i in range(len(shippings)):
-        if hour <= shippings[i].leavingHour:
-            hour = shippings[i].leavingHour
-        else:
-            return False  # two shippings overlap in time
+        nextLocation = shippings[i].road[0]
+        if location != nextLocation:
+            path, travelTime = search(location, nextLocation, hour)
+            if not path:
+                return False, 0
+            hour += travelTime/60
+
+        if hour > shippings[i].leavingHour:
+            return False, 0
+
         hour = shippings[i].leavingHour + shippings[i].time
-        if i > 0:
-            location = shippings[i - 1].road[-1]
-            nextLocation = shippings[i].road[0]
-            if location != nextLocation:
-                path, time = search(location, nextLocation, hour)
-                if not path:
-                    return False
-                hour += time/60
-        # else:
-        #     location = driver.ubication
-        #     nextLocation = shippings[i].road[0]
-        #     if location != nextLocation:
-        #         time = driver.workdayStart
-        #         path, travelTime = search(location, nextLocation, time)
-        #         print(f"Driver: {driver.name}, Location: {location}, Next Location: {nextLocation}, Time: {time}, Path: {path}, Travel Time: {travelTime}")
-        #         if not path:
-        #             return False
-        #         time = travelTime/60
-        #         if time > shippings[i].leavingHour:
-        #             return False
+        location = shippings[i].road[-1]
 
         if hour > driver.workdayEnd:
-            return False
-    return True
+            return False, 0
+    return True, shipping.leavingHour
 
 def assignShippingsToDrivers(Shippings: list[Shipping], drivers: list[Driver]) -> bool:
-    for driver in drivers:
-        driver.setDomain(Shippings)
+    for shipping in Shippings:
+        shipping.setDomain(drivers)
     return backtracking(Shippings, drivers)
 
 def backtracking(shippings: list[Shipping], drivers: list[Driver]) -> bool:
@@ -61,31 +50,30 @@ def backtracking(shippings: list[Shipping], drivers: list[Driver]) -> bool:
         return True  # All shippings have been assigned
 
     unassigned = [shipping for shipping in shippings if shipping.driver is None]
+    unassigned.sort(key=lambda x: len(x.domain))
+    shipping = unassigned[0]
 
-    shipping_candidates = []
-    for shipping in unassigned:
-        candidates = [driver for driver in drivers if shipping in driver.domain and checkFeasibility(driver, shipping)]
-        if not candidates:
-            return False
-        shipping_candidates.append((shipping, candidates))
-
-    shipping_candidates.sort(key=lambda item: len(item[1]))
-    shipping, candidates = shipping_candidates[0]
+    candidates = sorted(shipping.domain, key=lambda x: len(x.shippings))
 
     for driver in candidates:
-        driver.assignShipping(shipping)
-        print(f"{driver.name} assign {shipping.id}")
-        affectedDrivers = removeShippingToOtherDrivers(shipping, drivers)
+        feasible, startTime = checkFeasibility(driver, shipping)
+        if not feasible:
+            continue
+
+        previous_domains = {item: list(item.domain) for item in shippings}
+        previous_driver_shippings = {item: list(item.shippings) for item in drivers}
+        previous_shipping_driver = shipping.driver
+
+        shipping.assignDriver(driver)
+        affectedShippings = updateDomains(startTime, shipping.leavingHour + shipping.time, driver, shippings)
 
         if backtracking(shippings, drivers):
-            return True  # Found a valid assignment
-        print(f"{driver.name} remove assign {shipping.id}")
-        driver.removeShipping(shipping)
-        driver.domain.append(shipping)
-        driver.domain.sort(key=lambda x: x.leavingHour)
+            return True
 
-        for otherDriver in affectedDrivers:
-            otherDriver.domain.append(shipping)
-            otherDriver.domain.sort(key=lambda x: x.leavingHour)
+        for item in shippings:
+            item.domain = previous_domains[item]
+        for item in drivers:
+            item.shippings = previous_driver_shippings[item]
+        shipping.driver = previous_shipping_driver
 
     return False  # No valid assignment found
