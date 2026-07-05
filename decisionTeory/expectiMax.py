@@ -24,20 +24,22 @@ def modifyTimeCost(time: float, roadStatus):
         time *= 3.0  # Incremento por bloqueo
     return time
 
-def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model = buildFeatureVector(), time: float = 0, depth: int = 5) -> tuple[float, list]:
+def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model = buildFeatureVector(), time: float = 0, depth: int = 4, path = []) -> tuple[float, list]:
     # CASO BASE 1: Llegamos al destino con éxito
     if node == endCity:
         return 0.0, [node]
     
     # CASO BASE 2: Límite de profundidad (usamos la heurística optimista)
     if depth == 0:
-        path, cost = search(node, endCity, hour, graph, model)
-        return cost, [node] + path[1:]  # Excluimos el nodo actual del camino para evitar duplicados
+        additionalPath, cost = search(node, endCity, hour, graph, model)
+        return cost, path + additionalPath
 
     min_cost = float('inf')
     best_path = []
 
     for neighbor, data in graph[node].items():
+        if neighbor in path:
+            continue
         x = data.copy()
         x["hour"] = (hour + time/60) % 24  
         edge_cost = model.wDotPhi(x)
@@ -58,7 +60,7 @@ def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model 
             modified_cost = modifyTimeCost(edge_cost, status)
             
             cost_from_neighbor, execution_path = expectimax(
-                neighbor, endCity, x["hour"], graph, model, time + modified_cost, depth - 1
+                neighbor, endCity, x["hour"], graph, model, time + modified_cost, depth - 1, path + [node]
             )
             
             neighbor_expected_cost += prob * (modified_cost + cost_from_neighbor)
