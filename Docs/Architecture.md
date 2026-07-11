@@ -15,12 +15,13 @@ This project implements a modular structure fir scalability and maintenance.
 - [Routing](../routing/) implement graph search algorithms
 - [Docs](../Docs/) Techincal documentation.
 - [Data](../data/) Contain data necesary about the program
+- [Logs](../logs/)
 
 ## Data flow and components
-1. The time prediction model is trained.
-2. The city graph and the location dictionary are defined.
-3. Use the prediction model and the city graph for calculate the cost (time) of the travel, and the location is used to estimate the future cost using the Haversine´s formula divided in a selected max speed.
-4. Return the optimal secuence of the travel and the estimated time.
+1. The time prediction vector is trained/loaded.
+2. The city graph and the location dictionary are loaded.
+3. For each driver estimate the time using expectimax for incidents in road chances and A* for optimizate the search (implementing the time prediction model)
+4. Use each shipping data and travel time calculated for assign it to a set of drivers
 
 ⚠️ In development
 
@@ -35,10 +36,16 @@ Using a linear regression model taking the next characteristic:
 
 The liniear regression uses a stochastic gradient descned as an optimizer.
 
-### City Graph
-It´s represented as a dictionary of dictionaries, the key of the graph is the city name, this inner dict has a a value of other city (keys) that are included in the city graph, as values it coontains data about the weather and the street lenght of the road whose connect these cities.
+### Fuel consumption
 
-⚠️ In development
+$FuelConsumption = d\cdot [ \alpha \cdot (V_{avg})^2 + \beta \cdot (w_{empty} + w_{load})]$
+- d: Distance
+- $\alpha$: Aerodynamic drag coefficient and engine efficiency at speed.
+- $\beta$: Rolling resistance coefficient.
+- $w_{empty}$: Vehicle weight.
+- $w_{load}$: Shipping weight.
+
+$\alpha$ and $\beta$ are aproximated values for each vehicle
 
 ## Data consistency and persistence
 

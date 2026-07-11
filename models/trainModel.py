@@ -8,7 +8,7 @@ from models.linearRegression import linearRegression
 
 DATA_FILE_NAME = "data/roadTime.json"
 W_FILE_NAME = "data/model.json"
-TRAIN_LOG_NAME = "data/train_log.txt"
+TRAIN_LOG_NAME = "logs/train_log.txt"
 
 TRAIN_PORCENTAGE = 0.8
 VALIDATION_PORCENTAGE = 0.1
