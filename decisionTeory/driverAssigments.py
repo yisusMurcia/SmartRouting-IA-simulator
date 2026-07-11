@@ -1,19 +1,20 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-try:
-    from .transportationClasses import Driver, Shipping
-except ImportError:
-    from transportationClasses import Driver, Shipping
+from decisionTeory.transportationClasses import Driver, Shipping
 from routing.AStar import search
 
 def updateDomains(shipStartTime: float, shipEndTime: float, driver: Driver, shippings: list[Shipping]):
-    affectedShippings = [shipping for shipping in shippings if driver in shipping.domain]
+    affectedShippings = getAffectedShippings(driver, shippings)
     for shipping in affectedShippings:
         shippingEndTime = shipping.leavingHour + shipping.time
         if shipping.leavingHour < shipEndTime and shippingEndTime > shipStartTime:
             shipping.removeDriverFromDomain(driver)
     return affectedShippings
+
+def getAffectedShippings(driver: Driver, shippings: list[Shipping]):
+    return [shipping for shipping in shippings if driver in shipping.domain]
 
 def checkFeasibility(driver: Driver, shipping: Shipping) -> tuple[bool, float]:
     # Check workday constraints
@@ -53,8 +54,8 @@ def backtracking(shippings: list[Shipping], drivers: list[Driver]) -> bool:
     unassigned.sort(key=lambda x: len(x.domain))
     shipping = unassigned[0]
 
-    candidates = sorted(shipping.domain, key=lambda x: len(x.shippings))
-
+    candidates = sorted(shipping.domain, key=lambda x: len(getAffectedShippings(x, shippings)), reverse = True)
+    
     for driver in candidates:
         feasible, startTime = checkFeasibility(driver, shipping)
         if not feasible:
