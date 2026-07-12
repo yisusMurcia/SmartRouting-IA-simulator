@@ -23,7 +23,6 @@ This project implements a modular structure fir scalability and maintenance.
 3. For each driver estimate the time using expectimax for incidents in road chances and A* for optimizate the search (implementing the time prediction model)
 4. Use each shipping data and travel time calculated for assign it to a set of drivers
 
-⚠️ In development
 
 ## Technical specifications
 

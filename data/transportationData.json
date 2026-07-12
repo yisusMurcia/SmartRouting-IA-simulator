@@ -1,0 +1,64 @@
+{
+    "drivers_data": [
+    {
+      "name": "Juan",
+      "max_weight": 500.0,
+      "ubication": "Ubate",
+      "workday_start": 5.0,
+      "workday_end": 15.0
+    },
+    {
+      "name": "Carlos",
+      "max_weight": 600.0,
+      "ubication": "Tunja",
+      "workday_start": 6.0,
+      "workday_end": 18.0
+    },
+    {
+      "name": "Andres",
+      "max_weight": 1200.0,
+      "ubication": "Ubate",
+      "workday_start": 9.0,
+      "workday_end": 19.0
+    },
+    {
+      "name": "Marta",
+      "max_weight": 600.0,
+      "ubication": "Bogota",
+      "workday_start": 11.0,
+      "workday_end": 21.0
+    }
+  ],
+  "shipping_data": [
+      {
+      "start_city": "Bogota",
+      "end_city": "Chiapinero",
+      "leaving_hour": 12.0,
+      "weight": 200.0
+    },
+    {
+      "start_city": "Chiapinero",
+      "end_city": "Usaquen",
+      "leaving_hour": 13.5,
+      "weight": 400.0
+    },
+    {
+      "start_city": "Usaquen",
+      "end_city": "Zipaquira",
+      "leaving_hour": 15.0,
+      "weight": 900.0
+    },
+    {
+      "start_city": "Zipaquira",
+      "end_city": "Nemocon",
+      "leaving_hour": 16.5,
+      "weight": 300.0
+    },
+    {
+      "start_city": "Bogota",
+      "end_city": "Chipaque",
+      "leaving_hour": 17.5,
+      "weight": 150.0
+    }
+  ]
+}
