@@ -2,22 +2,23 @@ import json
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from decisionTeory.transportationClasses import Driver, Shipping
+from decisionTeory.transportationClasses import Truck, Shipping
 from decisionTeory.expectiMax import expectimax
+from routing.distanceGetter import getDistance
 
 DATA_FILE_NAME = "data/transportationData.json"
 
-def loadDriversData()->list[Driver]: # Return a list of dictionaries with the driver data
+def loadTrucksData()->list[Truck]: # Return a list of dictionaries with the Truck data
     data = []
     with open(DATA_FILE_NAME, "r", encoding="utf-8") as f:
-        driverData = json.load(f)
+        TruckData = json.load(f)
 
-    records = driverData.get("drivers_data", driverData) if isinstance(driverData, dict) else driverData
+    records = TruckData.get("Trucks_data", TruckData) if isinstance(TruckData, dict) else TruckData
 
     for record in records:
         if isinstance(record, dict):
-            driver = Driver(record["name"], record["max_weight"], record["ubication"], record["workday_start"], record["workday_end"])
-            data.append(driver)
+            truck = Truck(record["name"], record["max_weight"], record["ubication"], record["workday_start"], record["workday_end"])
+            data.append(truck)
     return data
 
 def loadShippingsData()->list[dict]:
@@ -39,7 +40,9 @@ def buildShippings(routes, model)->list[Shipping]:
     data = loadShippingsData()
     for record in data:
         time, road = expectimax(record["start_city"], record["end_city"], record["leaving_hour"], routes, model)
-        shipping = Shipping(road, record["leaving_hour"], record["weight"], time/60)
+        distance = getDistance(road, routes)
+        shipping = Shipping(road, record["leaving_hour"], record["weight"], time/60, distance)
+        print(f"shipping {shipping.id}: {distance}")
         shippings.append(shipping)
 
     return shippings
