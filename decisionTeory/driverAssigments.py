@@ -46,7 +46,8 @@ def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
         if hour > driver.workdayEnd:
             return False, 0
     
-    print(fuelConsumption)
+    if fuelConsumption > driver.fuel:
+        return False, 0
     return True, shipping.leavingHour
 
 def assignShippingsToDrivers(Shippings: list[Shipping], drivers: list[Truck]) -> bool:

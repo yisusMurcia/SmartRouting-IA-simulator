@@ -16,7 +16,6 @@ class Truck:
         distance = distance / 1000 #convert m to Km
         avgSpeed = distance / time
         fuelC = distance * (self.alpha * avgSpeed**2 + self.beta* (weight + self.truckWeight)) 
-        print(f"driver {self.driverName}: {fuelC} L")
         return fuelC
 
 class Shipping:
@@ -41,15 +40,15 @@ class Shipping:
             self.domain.remove(Truck)
 
     def assignTruck(self, Truck: Truck):
-        self.Truck = Truck
+        self.truck = Truck
         if self not in Truck.shippings:
             Truck.shippings.append(self)
         self.removeTruckFromDomain(Truck)
 
     def removeTruck(self):
-        if self.Truck:
-            if self.Truck not in self.domain:
-                self.domain.append(self.Truck)
-            if self in self.Truck.shippings:
-                self.Truck.shippings.remove(self)
+        if self.truck:
+            if self.truck not in self.domain:
+                self.domain.append(self.truck)
+            if self in self.truck.shippings:
+                self.truck.shippings.remove(self)
             self.Truck = None

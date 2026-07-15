@@ -13,11 +13,11 @@ def loadTrucksData()->list[Truck]: # Return a list of dictionaries with the Truc
     with open(DATA_FILE_NAME, "r", encoding="utf-8") as f:
         TruckData = json.load(f)
 
-    records = TruckData.get("Trucks_data", TruckData) if isinstance(TruckData, dict) else TruckData
+    records = TruckData.get("trucks_data", TruckData) if isinstance(TruckData, dict) else TruckData
 
     for record in records:
         if isinstance(record, dict):
-            truck = Truck(record["name"], record["max_weight"], record["ubication"], record["workday_start"], record["workday_end"])
+            truck = Truck(record["name"], record["max_weight"], record["ubication"], record["workday_start"], record["workday_end"], record["truck_weight"], record["fuel"], record["alpha"], record["beta"])
             data.append(truck)
     return data
 
@@ -42,7 +42,6 @@ def buildShippings(routes, model)->list[Shipping]:
         time, road = expectimax(record["start_city"], record["end_city"], record["leaving_hour"], routes, model)
         distance = getDistance(road, routes)
         shipping = Shipping(road, record["leaving_hour"], record["weight"], time/60, distance)
-        print(f"shipping {shipping.id}: {distance}")
         shippings.append(shipping)
 
     return shippings
