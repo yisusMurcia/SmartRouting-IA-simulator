@@ -5,6 +5,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import json
 from models.model import Model
 from models.linearRegression import linearRegression
+from datetime import datetime
+import inspect
 
 DATA_FILE_NAME = "data/roadTime.json"
 W_FILE_NAME = "data/model.json"
@@ -51,18 +53,21 @@ def buildFeatureVector()->Model:
     #Compare dates from road-time and feature-vector, if road-time is more recent retrain the model
     train_data_time = os.path.getmtime(DATA_FILE_NAME)
     w_data_time = 0
+    file_path = inspect.getsourcefile(Model)
+    feature_vector_time = os.path.getmtime(file_path) if file_path else int('inf')
     try:
         w_data_time = os.path.getmtime(W_FILE_NAME)
     except FileNotFoundError:
         w_data_time = -1
 
-
     featureVector = None
-    if w_data_time >= train_data_time: 
+    if feature_vector_time < w_data_time and w_data_time >= train_data_time: 
         w = readW()
         featureVector = Model([], w)
+        print("Imported model")
     else: #train model
         featureVector = trainModel()
+        print("Retrained model")
 
     return featureVector
 
@@ -78,14 +83,19 @@ def trainModel()->Model:
     fv.assignW(w)
     saveW(fv.featureVector)
 
+    y_estimated = [fv.wDotPhi(data) for data in x]
+
     #Save log
+    date = datetime.now()
     file = open(TRAIN_LOG_NAME, 'w')
+    file.write(f"Date {date.date()}\n")
+    file.write(f"Data lenght: {len(x)}\n")
     file.write(f"Square loss: {loss}, loss: {math.sqrt(loss)}\n")
     file.write("Validation:\n")
     square_sum = 0
     size = int(len(x)* VALIDATION_PORCENTAGE)
     for i in range(0, size):
-        predicted = fv.wDotPhi(x_train[i])
+        predicted = y_estimated[i]
         file.write(f"Predicted: {predicted}, actual: {y[i]}\n")
         square_sum+= (predicted - y[i])** 2
     loss = square_sum/ size
@@ -95,12 +105,16 @@ def trainModel()->Model:
     square_sum = 0
     size = len(x) - len(data_train)
     for i in range(len(data_train), len(x)):
-        predicted = fv.wDotPhi(x[i])
+        predicted = y_estimated[i]
         file.write(f"Predicted: {predicted}, actual: {y[i]}\n")
         square_sum+= (predicted - y[i])** 2
 
     loss = square_sum/ size
     file.write(f"Square loss: {loss}, loss: {loss**(1/2)}\n")
+
+    avgErrorPorcentage = sum(abs(1- y_estimated[i]/y[i]) for i in range(len(x)))/len(x)
+
+    file.write(f"Average error porcentage: {avgErrorPorcentage}")
 
     file.close()
 
