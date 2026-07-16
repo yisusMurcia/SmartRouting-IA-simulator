@@ -27,7 +27,7 @@ class Model:
         for i in range(3):
             phi[f"hour_grade_{i}"] = (x["hour"]/24)**i
         phi["street_length"] = x["street_length"]/1000
-        phi[x["weather"]] = phi["street_length"]**2 * x["hour"]
+        phi[x["weather"]] = phi["street_length"] * x["hour"]
 
         return phi
     

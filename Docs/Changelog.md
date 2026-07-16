@@ -1,5 +1,13 @@
 # Changelog 📃
 
+## V1.1.1 - 2026-07-16
+
+### Fixed
+- Expectimax algorithm returning inconsited paths
+### Modified
+- Updated the time prediction model
+- Log with more useful data
+
 ## V1.1.0 - 2026-07-15
 
 ### Added
