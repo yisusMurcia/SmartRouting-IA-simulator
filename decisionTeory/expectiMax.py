@@ -27,7 +27,7 @@ def modifyTimeCost(time: float, roadStatus):
 def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model = buildFeatureVector(), time: float = 0, depth: int = 4, path = []) -> tuple[float, list]:
     # CASO BASE 1: Llegamos al destino con éxito
     if node == endCity:
-        return 0.0, [node]
+        return 0.0, path + [node]
     
     # CASO BASE 2: Límite de profundidad (usamos la heurística optimista)
     if depth == 0:
@@ -70,6 +70,6 @@ def expectimax(node: str, endCity: str, hour: float, graph = getRoutes(), model 
         # una vez conocemos el verdadero costo esperado total de este vecino.
         if neighbor_expected_cost < min_cost:
             min_cost = neighbor_expected_cost
-            best_path = [node] + neighbor_sub_paths[max(neighbor_sub_paths.keys(), key=lambda k: probabilities[k])]
+            best_path = neighbor_sub_paths[max(neighbor_sub_paths.keys(), key=lambda k: probabilities[k])]
 
     return min_cost, best_path
