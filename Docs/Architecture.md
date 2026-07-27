@@ -6,6 +6,9 @@ This system is disigned by independent but conected phases:
 
 1. Prediction phase: Calculate the stimate traffic and time cost of a road using machine learning
 2. Routing phase: Find the optimal route in a road network graph using the cost prediction created in phase 1.
+3. Adversarial games: Compute the routing process as an adversarial game against nature, taking in count the accident/block probabilities.
+4. CSP: Implement all phases as a part of a constraint satisfaction problem, assigning a set of ships to some drivers looking for optimize the routes.
+
 
 ## Layout
 
