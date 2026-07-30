@@ -17,7 +17,7 @@ def updateDomains(shipStartTime: float, shipEndTime: float, driver: Truck, shipp
 def getAffectedShippings(driver: Truck, shippings: list[Shipping]):
     return [shipping for shipping in shippings if driver in shipping.domain]
 
-def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
+def checkFeasibility(driver: Truck, shipping: Shipping, model, routes) -> tuple[bool, float]:
     # Check workday constraints
     shippings = list(driver.shipments)
     shippings.append(shipping)
@@ -28,7 +28,7 @@ def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
     for i in range(len(shippings)):
         nextLocation = shippings[i].road[0]
         if location != nextLocation:
-            path, travelTime = search(location, nextLocation, hour)
+            path, travelTime = search(location, nextLocation, hour, routes, model)
             if not path:
                 return False, 0
             hour += travelTime/60
@@ -50,12 +50,12 @@ def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
         return False, 0
     return True, shipping.leavingHour
 
-def assignShipmentsToDrivers(Shippings: list[Shipping], drivers: list[Truck]) -> bool:
+def assignShipmentsToDrivers(Shippings: list[Shipping], drivers: list[Truck], model, routes) -> bool:
     for shipping in Shippings:
         shipping.setDomain(drivers)
-    return backtracking(Shippings, drivers)
+    return backtracking(Shippings, drivers, model, routes)
 
-def backtracking(shippings: list[Shipping], drivers: list[Truck]) -> bool:
+def backtracking(shippings: list[Shipping], drivers: list[Truck], model, routes) -> bool:
     if all(shipping.truck is not None for shipping in shippings):
         return True  # All shippings have been assigned
 
@@ -66,7 +66,7 @@ def backtracking(shippings: list[Shipping], drivers: list[Truck]) -> bool:
     candidates = sorted(shipping.domain, key=lambda x: len(getAffectedShippings(x, shippings)), reverse = True)
     
     for driver in candidates:
-        feasible, startTime = checkFeasibility(driver, shipping)
+        feasible, startTime = checkFeasibility(driver, shipping, model, routes)
         if not feasible:
             continue
 
@@ -77,7 +77,7 @@ def backtracking(shippings: list[Shipping], drivers: list[Truck]) -> bool:
         shipping.assignTruck(driver)
         affectedShippings = updateDomains(startTime, shipping.leavingHour + shipping.time, driver, shippings)
 
-        if backtracking(shippings, drivers):
+        if backtracking(shippings, drivers, model, routes):
             return True
 
         for item in shippings:

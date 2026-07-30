@@ -10,7 +10,7 @@ async def make_assignments(model = Depends(get_model), routes = Depends(get_rout
     drivers = loadTrucksData()
     shipments = buildShipments(routes, model)
     assignation = {}
-    if assignShipmentsToDrivers(shipments, drivers):
+    if assignShipmentsToDrivers(shipments, drivers, model, routes):
         for driver in drivers:
             assignation[driver.driverName] = [shipment.id for shipment in driver.shipments]
     return assignation
