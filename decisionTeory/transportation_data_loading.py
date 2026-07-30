@@ -35,7 +35,7 @@ def loadShippingsData()->list[dict]:
     return data
 
 
-def buildShippings(routes, model)->list[Shipping]:
+def buildShipments(routes, model)->list[Shipping]:
     shippings = []
     data = loadShippingsData()
     for record in data:

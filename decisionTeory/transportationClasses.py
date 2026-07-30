@@ -1,8 +1,10 @@
 class Truck:
-    def __init__(self, driverName: str, maxWeight: float, ubication: str, workdayStart: float, workdayEnd: float, truckWeight = 11000, fuel = 450, alpha = 2.1e-4, beta = 6.2e-6):
+    id = 0
+    def __init__(self, driverName: str, maxWeight: float, location: str, workdayStart: float, workdayEnd: float, truckWeight = 11000, fuel = 450, alpha = 2.1e-4, beta = 6.2e-6):
+        self.id = Truck.id
         self.driverName = driverName
         self.maxWeight = maxWeight
-        self.ubication = ubication
+        self.location = location
         self.workdayStart = workdayStart
         self.workdayEnd = workdayEnd if workdayEnd > workdayStart else workdayStart + 24
         self.truckWeight = truckWeight
@@ -10,7 +12,8 @@ class Truck:
         self.alpha = alpha
         self.beta = beta
         self.domain:list[Shipping] = []
-        self.shippings: list[Shipping] = []
+        self.shipments: list[Shipping] = []
+        Truck.id += 1
 
     def calculateFuelConsumption(self, distance: float, time: float, weight: float) -> float:
         distance = distance / 1000 #convert m to Km
@@ -41,14 +44,14 @@ class Shipping:
 
     def assignTruck(self, Truck: Truck):
         self.truck = Truck
-        if self not in Truck.shippings:
-            Truck.shippings.append(self)
+        if self not in Truck.shipments:
+            Truck.shipments.append(self)
         self.removeTruckFromDomain(Truck)
 
     def removeTruck(self):
         if self.truck:
             if self.truck not in self.domain:
                 self.domain.append(self.truck)
-            if self in self.truck.shippings:
-                self.truck.shippings.remove(self)
+            if self in self.truck.shipments:
+                self.truck.shipments.remove(self)
             self.Truck = None

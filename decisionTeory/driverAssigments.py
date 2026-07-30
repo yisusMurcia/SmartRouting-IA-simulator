@@ -19,12 +19,12 @@ def getAffectedShippings(driver: Truck, shippings: list[Shipping]):
 
 def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
     # Check workday constraints
-    shippings = list(driver.shippings)
+    shippings = list(driver.shipments)
     shippings.append(shipping)
     shippings.sort(key=lambda x: x.leavingHour)
     hour = driver.workdayStart
     fuelConsumption = 0
-    location = driver.ubication
+    location = driver.location
     for i in range(len(shippings)):
         nextLocation = shippings[i].road[0]
         if location != nextLocation:
@@ -50,7 +50,7 @@ def checkFeasibility(driver: Truck, shipping: Shipping) -> tuple[bool, float]:
         return False, 0
     return True, shipping.leavingHour
 
-def assignShippingsToDrivers(Shippings: list[Shipping], drivers: list[Truck]) -> bool:
+def assignShipmentsToDrivers(Shippings: list[Shipping], drivers: list[Truck]) -> bool:
     for shipping in Shippings:
         shipping.setDomain(drivers)
     return backtracking(Shippings, drivers)
@@ -71,7 +71,7 @@ def backtracking(shippings: list[Shipping], drivers: list[Truck]) -> bool:
             continue
 
         previous_domains = {item: list(item.domain) for item in shippings}
-        previous_driver_shippings = {item: list(item.shippings) for item in drivers}
+        previous_driver_shippings = {item: list(item.shipments) for item in drivers}
         previous_shipping_driver = shipping.truck
 
         shipping.assignTruck(driver)
@@ -83,7 +83,7 @@ def backtracking(shippings: list[Shipping], drivers: list[Truck]) -> bool:
         for item in shippings:
             item.domain = previous_domains[item]
         for item in drivers:
-            item.shippings = previous_driver_shippings[item]
+            item.shipments = previous_driver_shippings[item]
         shipping.truck = previous_shipping_driver
 
     return False  # No valid assignment found

@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from decisionTeory.transportationClasses import Driver, Shipping
-from decisionTeory.driverAssigments import assignShippingsToDrivers
+from decisionTeory.driverAssigments import assignShipmentsToDrivers
 
 envios_lista = [
     Shipping(road=["Bogota", "Chiapinero"], leavingHour=12.0, weight=200.0, time=1.0),
@@ -19,9 +19,9 @@ conductores_lista = [
     Driver(name="Marta", maxWeight=600.0, ubication="Bogota", workdayStart=12.0, workdayEnd=20.0)
 ]
 
-result = assignShippingsToDrivers(envios_lista, conductores_lista)
+result = assignShipmentsToDrivers(envios_lista, conductores_lista)
 print(result)
 assert result is True, "The solver should find a feasible assignment for this test instance."
 
 for driver in conductores_lista:
-    print(f"Driver: {driver.name}, Assigned Shippings: {[shipping.id for shipping in driver.shippings]}")
+    print(f"Driver: {driver.name}, Assigned Shippings: {[shipping.id for shipping in driver.shipments]}")

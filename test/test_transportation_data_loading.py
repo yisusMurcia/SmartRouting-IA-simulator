@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from decisionTeory.transportationClasses import Driver, Shipping
 from models.trainModel import buildFeatureVector
 from routing.routeImportation import getRoutes
-from decisionTeory.transportation_data_loading import loadDriversData, loadShippingsData, buildShippings
+from decisionTeory.transportation_data_loading import loadDriversData, loadShippingsData, buildShipments
 
 def test_loadingDriversData():
     drivers = loadDriversData()
@@ -18,6 +18,6 @@ def test_loadingShippingsData():
 def test_buildShippings():
     model = buildFeatureVector()
     routes = getRoutes()
-    shippings = buildShippings(routes, model)
+    shippings = buildShipments(routes, model)
     assert isinstance(shippings, list)
     assert all(isinstance(shipping, Shipping) for shipping in shippings)
